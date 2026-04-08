@@ -10,14 +10,54 @@ git-pkg.dev translates the GitHub Releases API into a [PEP 503](https://peps.pyt
 
 ## Install a package
 
+### pip
+
 ```bash
 pip install mypackage --index-url https://git-pkg.dev/owner/
 ```
 
-### Private repos
+### uv
 
 ```bash
+uv pip install mypackage --index-url https://git-pkg.dev/owner/
+```
+
+Or configure it in `pyproject.toml` so your whole team gets it automatically:
+
+```toml
+[[tool.uv.index]]
+name = "git-pkg"
+url = "https://git-pkg.dev/owner/"
+```
+
+### poetry
+
+```toml
+# pyproject.toml
+[[tool.poetry.source]]
+name = "git-pkg"
+url = "https://git-pkg.dev/owner/"
+```
+
+### pdm
+
+```toml
+# pyproject.toml
+[[tool.pdm.source]]
+name = "git-pkg"
+url = "https://git-pkg.dev/owner/"
+```
+
+### Private repos
+
+Pass your GitHub token via standard Basic Auth — works with any tool:
+
+```bash
+# pip
 pip install mypackage --index-url https://x:${GH_TOKEN}@git-pkg.dev/myorg/
+
+# uv
+uv pip install mypackage --index-url https://x:${GH_TOKEN}@git-pkg.dev/myorg/
 ```
 
 ### Pin in requirements.txt
