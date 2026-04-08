@@ -74,19 +74,6 @@ git-pkg.dev is secure by design — not by policy, but by architecture.
 - **Rate limited.** Per-IP rate limiting protects against abuse (100 req/min, burst of 20).
 - **Fully auditable.** The proxy is open source. The entire codebase is a single Go binary with zero dependencies beyond the standard library.
 
-## Run locally
-
-```bash
-go run .
-# Server starts on :9090
-```
-
-Set `GITHUB_TOKEN` for higher API rate limits and private repo access:
-
-```bash
-GITHUB_TOKEN=ghp_xxx go run .
-```
-
 ## License
 
 MIT
