@@ -61,6 +61,19 @@ git push origin v1.0.0
 
 That's it. No registry account. No API tokens. No upload step.
 
+## Security
+
+git-pkg.dev is secure by design — not by policy, but by architecture.
+
+- **No credentials stored.** git-pkg.dev has no user accounts, no passwords, no API tokens. There is nothing to breach.
+- **No artifacts stored.** Wheels are never uploaded to or cached by the proxy. pip downloads directly from GitHub's CDN. There is no artifact storage to compromise.
+- **No code execution.** The proxy serves static HTML. It does not build, extract, or run any package code.
+- **Identity is GitHub.** Package authenticity is tied to the GitHub repo owner. You can verify the source, the commit, and the release in one place. No anonymous uploads.
+- **TLS enforced.** The `.dev` TLD requires HTTPS via HSTS preloading in all browsers. Connections cannot be downgraded.
+- **Private repos stay private.** Tokens are passed through to the GitHub API per-request and never logged or stored. Without a valid token, private packages return nothing.
+- **Rate limited.** Per-IP rate limiting protects against abuse (100 req/min, burst of 20).
+- **Fully auditable.** The proxy is open source. The entire codebase is a single Go binary with zero dependencies beyond the standard library.
+
 ## Run locally
 
 ```bash
