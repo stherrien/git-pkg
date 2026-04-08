@@ -61,6 +61,22 @@ git push origin v1.0.0
 
 That's it. No registry account. No API tokens. No upload step.
 
+## Why not just use GitHub Pages?
+
+You can host a static PEP 503 index on GitHub Pages yourself. It works. But you take on all the maintenance, and your consumers deal with the inconsistency.
+
+| | GitHub Pages (DIY) | git-pkg.dev |
+|---|---|---|
+| **Author setup** | Write a CI pipeline to build the index, configure Pages, maintain the generation script | Tag a release, attach a `.whl` — done |
+| **Multi-repo index** | You build and maintain an aggregator across repos | Automatic — all repos under an owner are indexed |
+| **Consumer experience** | Every author has a different Pages URL | One consistent pattern: `git-pkg.dev/owner/` |
+| **Private packages** | Pages are public or require GitHub Enterprise | Pass a token, works with any private repo |
+| **New release** | Wait for Pages CI to rebuild the index | Available immediately — the proxy reads releases in real time |
+| **Discoverability** | None unless you build a frontend | Browse any owner's packages at `git-pkg.dev/owner/` |
+| **Maintenance** | Index script breaks, Pages config drifts, you debug it | Zero — the proxy handles everything |
+
+GitHub Pages is the right choice if you want full control and don't mind the upkeep. git-pkg.dev is for everyone else.
+
 ## Security
 
 git-pkg.dev is secure by design — not by policy, but by architecture.
