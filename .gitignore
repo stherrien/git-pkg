@@ -12,3 +12,6 @@ git-pkg
 
 # Environment
 .env
+
+# Docs
+docs/
