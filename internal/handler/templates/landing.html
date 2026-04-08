@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>git-pkg.dev</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .container { max-width: 640px; text-align: center; }
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #58a6ff, #3fb950);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tagline {
+            font-size: 1.25rem;
+            color: #8b949e;
+            margin-bottom: 2rem;
+        }
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .search-form input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            background: #161b22;
+            color: #e6edf3;
+            outline: none;
+        }
+        .search-form input:focus { border-color: #58a6ff; }
+        .search-form button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            background: #238636;
+            color: #fff;
+            cursor: pointer;
+        }
+        .search-form button:hover { background: #2ea043; }
+        .how-it-works { text-align: left; margin-bottom: 2rem; }
+        .how-it-works h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #58a6ff;
+        }
+        .step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            align-items: flex-start;
+        }
+        .step-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #21262d;
+            border: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #8b949e;
+        }
+        .step-text { color: #c9d1d9; line-height: 1.5; }
+        code {
+            background: #161b22;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #79c0ff;
+        }
+        pre {
+            background: #161b22;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            overflow-x: auto;
+            margin-top: 1rem;
+            text-align: left;
+        }
+        pre code { background: none; padding: 0; color: #e6edf3; }
+        .install-example { margin-bottom: 2rem; text-align: left; }
+        .install-example h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #58a6ff;
+        }
+        footer {
+            margin-top: 2rem;
+            color: #484f58;
+            font-size: 0.85rem;
+        }
+        footer a { color: #58a6ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>git-pkg.dev</h1>
+        <p class="tagline">Turn GitHub Releases into pip-installable Python packages. Zero accounts. Zero uploads. Zero config.</p>
+
+        <form class="search-form" action="/" method="get" id="search-form">
+            <input type="text" name="q" placeholder="GitHub owner or org (e.g. octocat)" autocomplete="off" autofocus>
+            <button type="submit">Browse</button>
+        </form>
+
+        <div class="how-it-works">
+            <h2>What is this?</h2>
+            <p class="step-text" style="margin-bottom: 1.25rem;">
+                A stateless proxy that translates GitHub Releases into a
+                <a href="https://peps.python.org/pep-0503/" style="color: #58a6ff;">PEP 503</a>
+                package index. You tag a release, attach a <code>.whl</code> file, and your users
+                can <code>pip install</code> it. git-pkg.dev never stores your code or credentials &mdash;
+                it just translates the GitHub API into the format pip expects, and pip downloads
+                directly from GitHub's CDN.
+            </p>
+
+            <h2>For package authors</h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text">Add a GitHub Action to build your <code>.whl</code> on tagged releases.</div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text">Tag a release: <code>git tag v1.0.0 && git push origin v1.0.0</code></div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text">That's it. No registry account. No API tokens. No upload step.</div>
+            </div>
+        </div>
+
+        <div class="install-example">
+            <h2>Install a public package</h2>
+            <pre><code>pip install mypackage --index-url https://git-pkg.dev/owner/</code></pre>
+        </div>
+
+        <div class="install-example">
+            <h2>Install from a private repo</h2>
+            <pre><code>pip install mypackage \
+  --index-url https://x:${GH_TOKEN}@git-pkg.dev/myorg/</code></pre>
+        </div>
+
+        <div class="install-example">
+            <h2>Pin in requirements.txt</h2>
+            <pre><code>--index-url https://git-pkg.dev/myorg/
+mypackage==1.2.3
+another-pkg>=2.0</code></pre>
+        </div>
+
+        <div class="how-it-works">
+            <h2>Why not just <code>pip install git+https://</code>?</h2>
+            <div class="step">
+                <div class="step-num">&times;</div>
+                <div class="step-text">No version resolution &mdash; installs HEAD, not a pinned release.</div>
+            </div>
+            <div class="step">
+                <div class="step-num">&times;</div>
+                <div class="step-text">Clones the repo and builds from source every time. Slow.</div>
+            </div>
+            <div class="step">
+                <div class="step-num">&times;</div>
+                <div class="step-text"><code>pip freeze</code> outputs a git hash, not a version number.</div>
+            </div>
+            <div class="step" style="margin-bottom: 0;">
+                <div class="step-num" style="background: #238636; border-color: #238636; color: #fff;">&check;</div>
+                <div class="step-text">git-pkg.dev gives you real PEP 440 versions, pre-built wheels, and standard pip semantics.</div>
+            </div>
+        </div>
+
+        <footer>
+            <a href="https://github.com/stherrien/git-pkg">Source on GitHub</a>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById("search-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const q = this.querySelector("input").value.trim();
+            if (q) window.location.href = "/" + encodeURIComponent(q) + "/";
+        });
+    </script>
+</body>
+</html>
