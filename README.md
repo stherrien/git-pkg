@@ -87,14 +87,6 @@ Set `GITHUB_TOKEN` for higher API rate limits and private repo access:
 GITHUB_TOKEN=ghp_xxx go run .
 ```
 
-## Deploy
-
-```bash
-fly launch
-fly secrets set GITHUB_TOKEN=ghp_xxx
-fly deploy
-```
-
 ## License
 
 MIT
